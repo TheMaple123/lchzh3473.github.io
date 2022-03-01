@@ -160,14 +160,15 @@ const Renderer = { //存放谱面
 //全屏相关
 const full = {
 	toggle(elem) {
-		if (!this.enabled) return false;
-		if (this.element) {
+		// if (!this.enabled) return false;
+		if (this.element || elem && elem.pseudoFullScreen) {
 			// if (document.exitFullscreen) return document.exitFullscreen();
 			// if (document.cancelFullScreen) return document.cancelFullScreen();
 			// if (document.webkitCancelFullScreen) return document.webkitCancelFullScreen();
 			// if (document.mozCancelFullScreen) return document.mozCancelFullScreen();
 			// if (document.msExitFullscreen) return document.msExitFullscreen();
 			if (elem.pseudoFullScreen) {
+				elem.pseudoFullScreen = false;
 				elem.style.height = elem.pFSHeight;
 				elem.style.width = elem.pFSWidth;
 				elem.style.top = elem.pFSTop;
