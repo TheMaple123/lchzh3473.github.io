@@ -173,6 +173,7 @@ const full = {
 				elem.style.top = elem.pFSTop;
 				elem.style.left = elem.pFSLeft;
 				elem.style.zindex = elem.pFSZindex;
+				resizeCanvas();
 			}
 		} else {
 			// if (!(elem instanceof HTMLElement)) elem = document.body;
@@ -186,6 +187,7 @@ const full = {
 			elem.pFSTop = elem.style.top, elem.style.top = 0;
 			elem.pFSLeft = elem.style.left, elem.style.left = 0;
 			elem.pFSZindex = elem.style.zindex, elem.style.zindex = 999999;
+			resizeCanvas();
 		}
 	},
 	check(elem) {
