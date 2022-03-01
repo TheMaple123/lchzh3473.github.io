@@ -2,7 +2,7 @@
 const _i = ['Phigros模拟器', [1, 4, 14], 1611795955, 1640231350];
 document.oncontextmenu = e => e.preventDefault(); //qwq
 for (const i of document.getElementById("view-nav").children) {
-	i.addEventListener("click", function() {
+	i.addEventListener("click", function () {
 		for (const j of this.parentElement.children) j.classList.remove("active");
 		const doc = document.getElementById("view-doc");
 		const msg = document.getElementById("view-msg");
@@ -87,7 +87,7 @@ const selectaspectratio = document.getElementById("select-aspect-ratio");
 const selectglobalalpha = document.getElementById("select-global-alpha");
 const selectflip = document.getElementById("select-flip");
 const selectspeed = document.getElementById("select-speed");
-const scfg = function() {
+const scfg = function () {
 	let arr = [];
 	switch (selectflip.value) {
 		case "bl":
@@ -242,11 +242,11 @@ function resizeCanvas() {
 //qwq[water,demo,democlick]
 const qwq = [true, false, 3, 0];
 document.getElementById("demo").classList.add("hide");
-document.querySelector(".title").addEventListener("click", function() {
+document.querySelector(".title").addEventListener("click", function () {
 	if (qwq[1]) qwq[0] = !qwq[0];
 	else if (!--qwq[2]) document.getElementById("demo").classList.remove("hide");
 });
-document.getElementById("demo").addEventListener("click", function() {
+document.getElementById("demo").addEventListener("click", function () {
 	document.getElementById("demo").classList.add("hide");
 	uploads.classList.add("disabled");
 	const xhr = new XMLHttpRequest();
@@ -628,7 +628,7 @@ class ClickEvent2 {
 }
 //适配PC鼠标
 const isMouseDown = {};
-canvas.addEventListener("mousedown", function(evt) {
+canvas.addEventListener("mousedown", function (evt) {
 	evt.preventDefault();
 	const idx = evt.button;
 	const dx = (evt.pageX - getOffsetLeft(this)) / this.offsetWidth * this.width - (this.width - canvasos.width) / 2;
@@ -636,7 +636,7 @@ canvas.addEventListener("mousedown", function(evt) {
 	mouse[idx] = Click.activate(dx, dy);
 	isMouseDown[idx] = true;
 });
-canvas.addEventListener("mousemove", function(evt) {
+canvas.addEventListener("mousemove", function (evt) {
 	evt.preventDefault();
 	for (const idx in isMouseDown) {
 		if (isMouseDown[idx]) {
@@ -646,13 +646,13 @@ canvas.addEventListener("mousemove", function(evt) {
 		}
 	}
 });
-canvas.addEventListener("mouseup", function(evt) {
+canvas.addEventListener("mouseup", function (evt) {
 	evt.preventDefault();
 	const idx = evt.button;
 	delete mouse[idx];
 	delete isMouseDown[idx];
 });
-canvas.addEventListener("mouseout", function(evt) {
+canvas.addEventListener("mouseout", function (evt) {
 	evt.preventDefault();
 	for (const idx in isMouseDown) {
 		if (isMouseDown[idx]) {
@@ -662,7 +662,7 @@ canvas.addEventListener("mouseout", function(evt) {
 	}
 });
 //适配键盘(喵喵喵?)
-window.addEventListener("keydown", function(evt) {
+window.addEventListener("keydown", function (evt) {
 	if (document.activeElement.classList.value == "input") return;
 	if (btnPlay.value != "停止") return;
 	evt.preventDefault();
@@ -670,7 +670,7 @@ window.addEventListener("keydown", function(evt) {
 	else if (keyboard[evt.code] instanceof Click);
 	else keyboard[evt.code] = Click.activate(NaN, NaN);
 }, false);
-window.addEventListener("keyup", function(evt) {
+window.addEventListener("keyup", function (evt) {
 	if (document.activeElement.classList.value == "input") return;
 	if (btnPlay.value != "停止") return;
 	evt.preventDefault();
@@ -684,7 +684,7 @@ window.addEventListener("blur", () => {
 const passive = {
 	passive: false
 }; //不加这玩意会出现warning
-canvas.addEventListener("touchstart", function(evt) {
+canvas.addEventListener("touchstart", function (evt) {
 	evt.preventDefault();
 	for (const i of evt.changedTouches) {
 		const idx = i.identifier; //移动端存在多押bug(可能已经解决了？)
@@ -693,7 +693,7 @@ canvas.addEventListener("touchstart", function(evt) {
 		touch[idx] = Click.activate(dx, dy);
 	}
 }, passive);
-canvas.addEventListener("touchmove", function(evt) {
+canvas.addEventListener("touchmove", function (evt) {
 	evt.preventDefault();
 	for (const i of evt.changedTouches) {
 		const idx = i.identifier;
@@ -702,14 +702,14 @@ canvas.addEventListener("touchmove", function(evt) {
 		touch[idx].move(dx, dy);
 	}
 }, passive);
-canvas.addEventListener("touchend", function(evt) {
+canvas.addEventListener("touchend", function (evt) {
 	evt.preventDefault();
 	for (const i of evt.changedTouches) {
 		const idx = i.identifier;
 		delete touch[idx];
 	}
 });
-canvas.addEventListener("touchcancel", function(evt) {
+canvas.addEventListener("touchcancel", function (evt) {
 	evt.preventDefault();
 	for (const i of evt.changedTouches) {
 		const idx = i.identifier;
@@ -760,9 +760,9 @@ resizeCanvas();
 uploads.classList.add("disabled");
 select.classList.add("disabled");
 //初始化
-window.onload = function() {
+window.onload = function () {
 	//加载资源
-	(async function() {
+	(async function () {
 		let loadedNum = 0;
 		await Promise.all((obj => {
 			const arr = [];
@@ -943,7 +943,7 @@ const stat = {
 //const stat = new Stat();
 const comboColor = ["#fff", "#0ac3ff", "#f0ed69", "#a0e9fd", "#fe4365"];
 //读取文件
-upload.onchange = function() {
+upload.onchange = function () {
 	const file = this.files[0];
 	document.getElementById("filename").value = file ? file.name : "";
 	if (!file) {
@@ -1006,7 +1006,7 @@ let isOutStart = false; //结尾过渡动画
 let isOutEnd = false; //临时变量
 let isPaused = true; //暂停
 //加载文件
-const loadFile = function(file) {
+const loadFile = function (file) {
 	qwq[1] = true;
 	document.getElementById("demo").classList.add("hide");
 	const reader = new FileReader();
@@ -1015,7 +1015,7 @@ const loadFile = function(file) {
 		const size = file.size;
 		message.sendMessage(`加载文件：${Math.floor(progress.loaded / size * 100)}%`);
 	};
-	reader.onload = async function() {
+	reader.onload = async function () {
 		//加载zip//gildas-lormeau.github.io/zip.js)
 		const reader = new zip.ZipReader(new zip.Uint8ArrayReader(new Uint8Array(this.result)));
 		reader.getEntries().then(async zipDataRaw => {
@@ -1260,7 +1260,7 @@ const qwqIn = new Timer();
 const qwqOut = new Timer();
 const qwqEnd = new Timer();
 //play
-btnPlay.addEventListener("click", async function() {
+btnPlay.addEventListener("click", async function () {
 	btnPause.value = "暂停";
 	if (this.value == "播放") {
 		stopPlaying.push(playSound(res["mute"], true, false, 0)); //播放空音频(防止音画不同步)
@@ -1319,7 +1319,7 @@ btnPlay.addEventListener("click", async function() {
 		this.value = "播放";
 	}
 });
-btnPause.addEventListener("click", function() {
+btnPause.addEventListener("click", function () {
 	if (this.classList.contains("disabled") || btnPlay.value == "播放") return;
 	if (this.value == "暂停") {
 		qwqIn.pause();
@@ -1336,7 +1336,7 @@ btnPause.addEventListener("click", function() {
 		this.value = "暂停";
 	}
 });
-inputOffset.addEventListener("input", function() {
+inputOffset.addEventListener("input", function () {
 	if (this.value < -400) this.value = -400;
 	if (this.value > 600) this.value = 600;
 });
@@ -1484,7 +1484,7 @@ function qwqdraw1(now) {
 			const tick = (now - i.time) / i.duration;
 			ctxos.setTransform(...imgFlip(1, 0, 0, 1, i.offsetX, i.offsetY)); //缩放
 			if (selectflip.value[0] == "t") ctxos.transform(-1, 0, 0, -1, 0, 0); //qwq
-			ctxos.font = `bold ${noteScale*(256+128* (((0.2078 * tick - 1.6524) * tick + 1.6399) * tick + 0.4988))}px Mina`;
+			ctxos.font = `bold ${noteScale * (256 + 128 * (((0.2078 * tick - 1.6524) * tick + 1.6399) * tick + 0.4988))}px Mina`;
 			ctxos.textAlign = "center";
 			ctxos.textBaseline = "middle";
 			ctxos.fillStyle = i.color;
@@ -1849,7 +1849,7 @@ function chart123(chart) {
 				}
 			}
 		}
-		case 3: {}
+		case 3: { }
 		case 3473:
 			break;
 		default:
