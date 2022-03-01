@@ -167,12 +167,25 @@ const full = {
 			if (document.webkitCancelFullScreen) return document.webkitCancelFullScreen();
 			if (document.mozCancelFullScreen) return document.mozCancelFullScreen();
 			if (document.msExitFullscreen) return document.msExitFullscreen();
+			if (elem.pseudoFullScreen) {
+				elem.style.height = elem.pFSHeight;
+				elem.style.width = elem.pFSWidth;
+				elem.style.top = elem.pFSTop;
+				elem.style.left = elem.pFSLeft;
+				elem.style.zindex = elem.pFSZindex;
+			}
 		} else {
 			if (!(elem instanceof HTMLElement)) elem = document.body;
 			if (elem.requestFullscreen) return elem.requestFullscreen();
 			if (elem.webkitRequestFullscreen) return elem.webkitRequestFullscreen();
 			if (elem.mozRequestFullScreen) return elem.mozRequestFullScreen();
 			if (elem.msRequestFullscreen) return elem.msRequestFullscreen();
+			elem.pseudoFullScreen = true;
+			elem.pFSHeight = elem.style.height, elem.style.height = window.screen.availHeight;
+			elem.pFSWidth = elem.style.width, elem.style.width = window.screen.availWidth;
+			elem.pFSTop = elem.style.top, elem.style.top = 0;
+			elem.pFSLeft = elem.style.left, elem.style.left = 0;
+			elem.pFSZindex = elem.style.zindex, elem.style.zindex = 999999;
 		}
 	},
 	check(elem) {
