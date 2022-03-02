@@ -161,23 +161,26 @@ const Renderer = { //存放谱面
 const full = {
 	toggle(elem) {
 		// if (!this.enabled) return false;
-		if (this.element || elem && elem.pseudoFullScreen) {
+		if (this.element) {
 			if (document.exitFullscreen) return document.exitFullscreen();
 			if (document.cancelFullScreen) return document.cancelFullScreen();
 			if (document.webkitCancelFullScreen) return document.webkitCancelFullScreen();
 			if (document.mozCancelFullScreen) return document.mozCancelFullScreen();
 			if (document.msExitFullscreen) return document.msExitFullscreen();
+			elem.pseudoFullScreen = false;
 		} else {
 			if (!(elem instanceof HTMLElement)) elem = document.body;
 			if (elem.requestFullscreen) return elem.requestFullscreen();
 			if (elem.webkitRequestFullscreen) return elem.webkitRequestFullscreen();
 			if (elem.mozRequestFullScreen) return elem.mozRequestFullScreen();
 			if (elem.msRequestFullscreen) return elem.msRequestFullscreen();
+			elem.pseudoFullScreen = true;
+			resizeCanvas();
 		}
 	},
 	check(elem) {
 		if (!(elem instanceof HTMLElement)) elem = document.body;
-		return this.element == elem;
+		return this.element == elem || elem.pseudoFullScreen;
 	},
 	get element() {
 		return document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
@@ -221,14 +224,12 @@ selectscaleratio.addEventListener("change", resizeCanvas);
 selectaspectratio.addEventListener("change", resizeCanvas);
 //适应画面尺寸
 function resizeCanvas() {
-	// const width = document.documentElement.clientWidth;
-	// const height = document.documentElement.clientHeight;
-	// const defaultWidth = Math.min(854, width * 0.8);
-	// const defaultHeight = defaultWidth / (selectaspectratio.value || 16 / 9);
-	// const realWidth = Math.floor(full.check(canvas) ? width : defaultWidth);
-	// const realHeight = Math.floor(full.check(canvas) ? height : defaultHeight);
-	const realHeight = document.documentElement.clientHeight;
-	const realWidth = realHeight * (selectaspectratio.value || 16 / 9);
+	const width = document.documentElement.clientWidth;
+	const height = document.documentElement.clientHeight;
+	const defaultWidth = Math.min(854, width * 0.8);
+	const defaultHeight = defaultWidth / (selectaspectratio.value || 16 / 9);
+	const realWidth = Math.floor(full.check(canvas) ? width : defaultWidth);
+	const realHeight = Math.floor(full.check(canvas) ? height : defaultHeight);
 	canvas.style.cssText += `;width:${realWidth}px;height:${realHeight}px`;
 	canvas.width = realWidth * devicePixelRatio;
 	canvas.height = realHeight * devicePixelRatio;
