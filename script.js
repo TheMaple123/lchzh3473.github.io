@@ -162,18 +162,18 @@ const full = {
 	toggle(elem) {
 		// if (!this.enabled) return false;
 		if (this.element) {
-			// if (document.exitFullscreen) return document.exitFullscreen();
-			// if (document.cancelFullScreen) return document.cancelFullScreen();
-			// if (document.webkitCancelFullScreen) return document.webkitCancelFullScreen();
-			// if (document.mozCancelFullScreen) return document.mozCancelFullScreen();
-			// if (document.msExitFullscreen) return document.msExitFullscreen();
+			if (document.exitFullscreen) return document.exitFullscreen();
+			if (document.cancelFullScreen) return document.cancelFullScreen();
+			if (document.webkitCancelFullScreen) return document.webkitCancelFullScreen();
+			if (document.mozCancelFullScreen) return document.mozCancelFullScreen();
+			if (document.msExitFullscreen) return document.msExitFullscreen();
 			elem.pseudoFullScreen = false;
 		} else {
-			// if (!(elem instanceof HTMLElement)) elem = document.body;
-			// if (elem.requestFullscreen) return elem.requestFullscreen();
-			// if (elem.webkitRequestFullscreen) return elem.webkitRequestFullscreen();
-			// if (elem.mozRequestFullScreen) return elem.mozRequestFullScreen();
-			// if (elem.msRequestFullscreen) return elem.msRequestFullscreen();
+			if (!(elem instanceof HTMLElement)) elem = document.body;
+			if (elem.requestFullscreen) return elem.requestFullscreen();
+			if (elem.webkitRequestFullscreen) return elem.webkitRequestFullscreen();
+			if (elem.mozRequestFullScreen) return elem.mozRequestFullScreen();
+			if (elem.msRequestFullscreen) return elem.msRequestFullscreen();
 			elem.pseudoFullScreen = true;
 			resizeCanvas();
 		}
