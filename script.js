@@ -168,7 +168,7 @@ const full = {
 			// if (document.mozCancelFullScreen) return document.mozCancelFullScreen();
 			// if (document.msExitFullscreen) return document.msExitFullscreen();
 			elem.pseudoFullScreen = false;
-			document.getElementById('#stage').style.marginLeft = null;
+			document.getElementById('stage').style.marginLeft = null;
 		} else {
 			if (!(elem instanceof HTMLElement)) elem = document.body;
 			// if (elem.requestFullscreen) return elem.requestFullscreen();
@@ -176,7 +176,7 @@ const full = {
 			// if (elem.mozRequestFullScreen) return elem.mozRequestFullScreen();
 			// if (elem.msRequestFullscreen) return elem.msRequestFullscreen();
 			elem.pseudoFullScreen = true;
-			document.getElementById('#stage').style.marginLeft = "0px";
+			document.getElementById('stage').style.marginLeft = "0px";
 			resizeCanvas();
 		}
 	},
