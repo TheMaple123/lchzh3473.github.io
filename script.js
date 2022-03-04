@@ -162,20 +162,20 @@ const full = {
 	toggle(elem) {
 		// if (!this.enabled) return false;
 		if (this.element || elem.pseudoFullScreen) {
-			// if (document.exitFullscreen) return document.exitFullscreen();
-			// if (document.cancelFullScreen) return document.cancelFullScreen();
-			// if (document.webkitCancelFullScreen) return document.webkitCancelFullScreen();
-			// if (document.mozCancelFullScreen) return document.mozCancelFullScreen();
-			// if (document.msExitFullscreen) return document.msExitFullscreen();
+			if (document.exitFullscreen) return document.exitFullscreen();
+			if (document.cancelFullScreen) return document.cancelFullScreen();
+			if (document.webkitCancelFullScreen) return document.webkitCancelFullScreen();
+			if (document.mozCancelFullScreen) return document.mozCancelFullScreen();
+			if (document.msExitFullscreen) return document.msExitFullscreen();
 			elem.pseudoFullScreen = false;
 			document.getElementById('stage').style.marginLeft = null;
 			resizeCanvas();
 		} else {
 			if (!(elem instanceof HTMLElement)) elem = document.body;
-			// if (elem.requestFullscreen) return elem.requestFullscreen();
-			// if (elem.webkitRequestFullscreen) return elem.webkitRequestFullscreen();
-			// if (elem.mozRequestFullScreen) return elem.mozRequestFullScreen();
-			// if (elem.msRequestFullscreen) return elem.msRequestFullscreen();
+			if (elem.requestFullscreen) return elem.requestFullscreen();
+			if (elem.webkitRequestFullscreen) return elem.webkitRequestFullscreen();
+			if (elem.mozRequestFullScreen) return elem.mozRequestFullScreen();
+			if (elem.msRequestFullscreen) return elem.msRequestFullscreen();
 			elem.pseudoFullScreen = true;
 			document.getElementById('stage').style.marginLeft = "0px";
 			resizeCanvas();
@@ -196,7 +196,7 @@ const full = {
 if (typeof zip != "object") message.sendWarning("检测到zip组件未正常加载，将无法使用模拟器");
 if (typeof createImageBitmap != "function") message.sendWarning("检测到当前浏览器不支持ImageBitmap，将无法使用模拟器");
 if (!(window.AudioContext || window.webkitAudioContext)) message.sendWarning("检测到当前浏览器不支持AudioContext，将无法使用模拟器");
-if (!full.enabled) message.sendWarning("检测到当前浏览器不支持全屏，播放时双击右下角将无反应");
+if (!full.enabled) message.sendWarning("检测到当前浏览器不支持全屏，播放时双击右下角将使用伪全屏");
 //qwq
 selectbg.onchange = () => {
 	Renderer.bgImage = bgs[selectbg.value];
