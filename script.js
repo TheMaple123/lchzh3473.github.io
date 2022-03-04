@@ -169,6 +169,7 @@ const full = {
 			// if (document.msExitFullscreen) return document.msExitFullscreen();
 			elem.pseudoFullScreen = false;
 			document.getElementById('stage').style.marginLeft = null;
+			resizeCanvas();
 		} else {
 			if (!(elem instanceof HTMLElement)) elem = document.body;
 			// if (elem.requestFullscreen) return elem.requestFullscreen();
