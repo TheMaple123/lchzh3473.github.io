@@ -1791,6 +1791,7 @@ function range(num) {
 }
 //绘制Note
 function drawNote(note, realTime, type) {
+	console.log("DrawNote");
 	const HL = note.isMulti && document.getElementById("highLight").checked;
 	if (!note.visible) return;
 	if (note.type != 3 && note.scored && !note.badtime) return;
