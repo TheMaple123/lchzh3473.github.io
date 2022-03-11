@@ -28,12 +28,14 @@
 			<label for="upload">选择zip</label>
 			<input type="text" style="width:0;flex-grow:1;flex-shrink:1;pointer-events:none" id="filename">
 		</div>
-		<input type="button" value="重置" onclick="location.reload(true)">
+		<br />
 		<div id="uploads-url" class="upload">
 			<span>或者输入URL:</span>
 			<input type="text" style="width:0;flex-grow:1;flex-shrink:1" id="url">
 			<input type="button" id="load-by-url" value="加载" />
 		</div>
+		<br />
+		<input type="button" value="重置" onclick="location.reload(true)">
 		<div id="select" class="disabled">
 			<div>谱面：<select id="select-chart" style="width:6em"></select></div>
 			<div>音乐：<select id="select-bgm" style="width:6em"></select></div>
