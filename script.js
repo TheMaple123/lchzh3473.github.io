@@ -1,5 +1,4 @@
 "use strict";
-const _i = ['Phigros模拟器', [1, 4, 14], 1611795955, 1640231350];
 document.oncontextmenu = e => e.preventDefault(); //qwq
 for (const i of document.getElementById("view-nav").children) {
 	i.addEventListener("click", function () {
@@ -75,6 +74,9 @@ const message = {
 //
 const upload = document.getElementById("upload");
 const uploads = document.getElementById("uploads");
+const url = document.getElementById('url');
+const loadByUrl = document.getElementById("load-by-url");
+const uploadsUrl = document.getElementById('uploads-url');
 const mask = document.getElementById("mask");
 const select = document.getElementById("select");
 const selectbg = document.getElementById("select-bg");
@@ -130,12 +132,14 @@ const lineColor = document.getElementById("lineColor");
 const autoplay = document.getElementById("autoplay");
 const hyperMode = document.getElementById("hyperMode");
 const showTransition = document.getElementById("showTransition");
+const renderFix = document.getElementById("renderFix");
 const bgs = {};
 const bgsBlur = {};
 const bgms = {};
 const charts = {};
 const chartLineData = []; //line.csv
 const chartInfoData = []; //info.csv
+let chartInfoDataJSON = null; //meta.json
 const AspectRatio = 16 / 9; //宽高比上限
 const Deg = Math.PI / 180; //角度转弧度
 let wlen, hlen, wlen2, hlen2, noteScale, lineScale; //背景图相关
@@ -220,6 +224,14 @@ function adjustInfo() {
 			inputDesigner.value = i.Designer;
 		}
 	}
+	if (chartInfoDataJSON) {
+		if (chartInfoDataJSON["name"]) inputName.value = chartInfoDataJSON["name"];
+		if (chartInfoDataJSON["chartDesigner"]) inputDesigner.value = chartInfoDataJSON["chartDesigner"];
+		if (chartInfoDataJSON["musicFile"]) selectbgm.value = chartInfoDataJSON["musicFile"];
+		if (chartInfoDataJSON["illustration"]) selectbg.value = chartInfoDataJSON["illustration"];
+		if (chartInfoDataJSON["illustrator"]) inputIllustrator.value = chartInfoDataJSON["illustrator"];
+		message.sendWarning("检测到PhiCommunity格式谱面信息(meta.json)\n将无法显示等级")
+	}
 }
 window.addEventListener("resize", resizeCanvas);
 document.addEventListener("fullscreenchange", resizeCanvas);
@@ -245,25 +257,19 @@ function resizeCanvas() {
 	noteScale = canvasos.width / (selectscaleratio.value || 8e3); //note、特效缩放
 	lineScale = canvasos.width > canvasos.height * 0.75 ? canvasos.height / 18.75 : canvasos.width / 14.0625; //判定线、文字缩放
 }
-//qwq[water,demo,democlick]
-const qwq = [true, false, 3, 0];
-document.getElementById("demo").classList.add("hide");
-document.querySelector(".title").addEventListener("click", function () {
-	if (qwq[1]) qwq[0] = !qwq[0];
-	else if (!--qwq[2]) document.getElementById("demo").classList.remove("hide");
-});
-document.getElementById("demo").addEventListener("click", function () {
-	document.getElementById("demo").classList.add("hide");
+loadByUrl.addEventListener("click", function () {
 	uploads.classList.add("disabled");
+	uploadsUrl.classList.add("disabled");
 	const xhr = new XMLHttpRequest();
-	xhr.open("get", "./src/demo.png", true); //避免gitee的404
+	xhr.open("get", url.value, true);
 	xhr.responseType = 'blob';
 	xhr.send();
 	xhr.onprogress = progress => { //显示加载文件进度
 		message.sendMessage(`加载文件：${Math.floor(progress.loaded / 5079057 * 100)}%`);
 	};
 	xhr.onload = () => {
-		document.getElementById("filename").value = "demo.zip";
+		document.getElementById("filename").value = url.value;
+		console.log(xhr.response);
 		loadFile(xhr.response);
 	};
 });
@@ -1013,8 +1019,6 @@ let isOutEnd = false; //临时变量
 let isPaused = true; //暂停
 //加载文件
 const loadFile = function (file) {
-	qwq[1] = true;
-	document.getElementById("demo").classList.add("hide");
 	const reader = new FileReader();
 	reader.readAsArrayBuffer(file);
 	reader.onprogress = progress => { //显示加载文件进度
@@ -1041,7 +1045,15 @@ const loadFile = function (file) {
 				} else if (i.filename == "info.csv") {
 					const data_2 = await i.getData(new zip.TextWriter());
 					const chartInfo = csv2array(data_2, true);
+					console.log("info.csv");
+					console.log(chartInfo);
 					chartInfoData.push(...chartInfo);
+					loading(++loadedNum);
+					resolve(chartInfo);
+				} else if (i.filename == "meta.json") { // PhiCommunity 格式
+					const data_3 = await i.getData(new zip.TextWriter());
+					console.log(data_3);
+					chartInfoDataJSON = JSON.parse(data_3);
 					loading(++loadedNum);
 					resolve(chartInfo);
 				} else i.getData(new zip.Uint8ArrayWriter()).then(async data => {
@@ -1791,7 +1803,9 @@ function range(num) {
 }
 //绘制Note
 function drawNote(note, realTime, type) {
-	//console.log("DrawNote");
+	//如果没有这个console.log iPhone上就无法显示Note 十分的玄学
+	if (renderFix.checked)
+		console.log("DrawNote");
 	const HL = note.isMulti && document.getElementById("highLight").checked;
 	if (!note.visible) return;
 	if (note.type != 3 && note.scored && !note.badtime) return;

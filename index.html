@@ -24,12 +24,16 @@
 		<p class="profile">将<a
 				id="qwq">谱面等资源文件(点击查看说明)</a>打包成zip然后上传；<br>读取完成后调节相关参数，最后点击“播放”按钮。<br>播放时双击画面：左上角暂停；右上角重新开始；右下角全屏。</p>
 		<div id="uploads" class="upload">
-			<input type="button" id="demo" value="Demo" class="hide">
 			<input type="file" accept="application/x-zip-compressed" id="upload">
 			<label for="upload">选择zip</label>
 			<input type="text" style="width:0;flex-grow:1;flex-shrink:1;pointer-events:none" id="filename">
 		</div>
 		<input type="button" value="重置" onclick="location.reload(true)">
+		<div id="uploads-url" class="upload">
+			<span>或者输入URL:</span>
+			<input type="text" style="width:0;flex-grow:1;flex-shrink:1" id="url">
+			<input type="button" id="load-by-url" value="加载" />
+		</div>
 		<div id="select" class="disabled">
 			<div>谱面：<select id="select-chart" style="width:6em"></select></div>
 			<div>音乐：<select id="select-bgm" style="width:6em"></select></div>
@@ -71,7 +75,8 @@
 			<div><input type="checkbox" id="showCE2"><label for="showCE2">Early/Late特效</label></div><br>
 			<div><input type="checkbox" id="hitSong" checked=""><label for="hitSong">开启打击音效</label></div>
 			<div><input type="checkbox" id="lineColor" checked=""><label for="lineColor">FC/AP指示器</label></div>
-			<div><input type="checkbox" id="showPoint"><label for="showPoint">显示定位点</label></div><br>
+			<div><input type="checkbox" id="showPoint"><label for="showPoint">显示定位点</label></div>
+			<div><input type="checkbox" id="renderFix"><label for="renderFix">渲染修复</label></div><br>
 			<div class="disabled-when-playing"><input type="checkbox" id="autoplay" checked=""><label
 					for="autoplay">AutoPlay</label></div>
 			<div class="disabled-when-playing"><input type="checkbox" id="hyperMode"><label
@@ -121,7 +126,7 @@
 		</div>
 	</div>
 	<noscript><strong style="color:red">此浏览器不支持JavaScript，该脚本无法运行。</strong></noscript>
-	<script src="//phi.d0j1a1701.cc/script.js?v1414"></script>
+	<script src="./script.js?v1414"></script>
 
 
 </body>

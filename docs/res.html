@@ -18,7 +18,8 @@
 		<tr>
 			<th class="left">谱面文件</th>
 			<th class="left">必需</th>
-			<th class="right">json<a name="json1" href="#json2"><sup>[3]</sup></a>/pec<a name="pec1" href="#pec2"><sup>[4]</sup></a></th>
+			<th class="right">json<a name="json1" href="#json2"><sup>[3]</sup></a>/pec<a name="pec1"
+					href="#pec2"><sup>[4]</sup></a></th>
 		</tr>
 		<tr>
 			<th class="left">背景音乐</th>
@@ -33,7 +34,8 @@
 		<tr>
 			<th class="left">配置文件</th>
 			<th class="left">可选</th>
-			<th class="right">info.csv<a name="info1" href="#info2"><sup>[6]</sup></a>/line.csv<a name="line1" href="#line2"><sup>[7]</sup></a></th>
+			<th class="right">info.csv或meta.json<a name="info1" href="#info2"><sup>[6]</sup></a>/line.csv<a name="line1"
+					href="#line2"><sup>[7]</sup></a></th>
 		</tr>
 	</table>
 	<hr>
@@ -77,7 +79,8 @@
 		<tr>
 			<td class="left"><a name="info2" href="#info1">[6]</a></td>
 			<td class="right">
-				info.csv：置于zip文件根目录，用于自动填写谱面信息 (参考:<a href="//www.rfc-editor.org/rfc/rfc4180" target="_blank">csv标准文档</a>)<br>
+				info.csv：置于zip文件根目录，用于自动填写谱面信息 (参考:<a href="//www.rfc-editor.org/rfc/rfc4180"
+					target="_blank">csv标准文档</a>)<br>
 				格式：Chart,Music,Image,AspectRatio,ScaleRatio,GlobalAlpha,Name,Level,Illustrator,Designer<br>
 				<table class="real-table">
 					<tr>
@@ -130,7 +133,8 @@
 		<tr>
 			<td class="left"><a name="line2" href="#line1">[7]</a></td>
 			<td class="right">
-				line.csv：置于zip文件根目录，用于替换指定判定线贴图 (参考:<a href="//www.rfc-editor.org/rfc/rfc4180" target="_blank">csv标准文档</a>)<br>
+				line.csv：置于zip文件根目录，用于替换指定判定线贴图 (参考:<a href="//www.rfc-editor.org/rfc/rfc4180"
+					target="_blank">csv标准文档</a>)<br>
 				格式：Chart,LineId,Image,Vert,Horz,IsDark<br>
 				<table class="real-table">
 					<tr>
@@ -151,7 +155,9 @@
 					</tr>
 					<tr>
 						<td class="left">Vert</td>
-						<td class="right">垂直宽度(负数取绝对值作为画面高度的比值，例如-0.5代表画面高度的一半；正数取绝对值为125倍判定线宽度的比值，例如0.016代表2倍判定线宽度；0代表隐藏判定线，不推荐使用；默认值0.008)</td>
+						<td class="right">
+							垂直宽度(负数取绝对值作为画面高度的比值，例如-0.5代表画面高度的一半；正数取绝对值为125倍判定线宽度的比值，例如0.016代表2倍判定线宽度；0代表隐藏判定线，不推荐使用；默认值0.008)
+						</td>
 					</tr>
 					<tr>
 						<td class="left">Horz</td>
