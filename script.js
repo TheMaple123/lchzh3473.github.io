@@ -770,6 +770,7 @@ const playSound = (res, loop, isOut, offset, playbackrate) => {
 const res = {}; //存放资源
 resizeCanvas();
 uploads.classList.add("disabled");
+uploadsUrl.classList.add("disabled");
 select.classList.add("disabled");
 //初始化
 window.onload = function () {
@@ -834,6 +835,7 @@ window.onload = function () {
 		res["Clicks"]["rgba(180,225,255,0.9215686)"] = await qwqImage(res["clickRaw"], "rgba(180,225,255,0.9215686)"); //#9ed5f3
 		message.sendMessage("等待上传文件...");
 		upload.parentElement.classList.remove("disabled");
+		uploadsUrl.classList.remove("disabled");
 	})();
 }
 async function qwqImage(img, color) {
@@ -963,7 +965,7 @@ upload.onchange = function () {
 		return;
 	}
 	uploads.classList.add("disabled");
-	urls.classList.add("disabled");
+	uploadsUrl.classList.add("disabled");
 	loadFile(file);
 }
 const time2Str = time => `${parseInt(time / 60)}:${`00${parseInt(time % 60)}`.slice(-2)}`;
