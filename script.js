@@ -1805,7 +1805,7 @@ function range(num) {
 function drawNote(note, realTime, type) {
 	//如果没有这个console.log iPhone上就无法显示Note 十分的玄学
 	if (renderFix.checked)
-		console.log("DrawNote");
+		console.log("DrawNote"), message.sendMessage("DrawNote " + realTime);
 	const HL = note.isMulti && document.getElementById("highLight").checked;
 	if (!note.visible) return;
 	if (note.type != 3 && note.scored && !note.badtime) return;
