@@ -369,6 +369,13 @@ function calcqwq(now) {
 
 function qwqdraw1(now) {
     ctxos.clearRect(0, 0, canvasos.width, canvasos.height); //重置画面
+
+    for (const i of Renderer.flicks) drawNote(i, timeChart, 4);
+    for (const i of Renderer.taps) drawNote(i, timeChart, 1);
+    for (const i of Renderer.drags) drawNote(i, timeChart, 2);
+    for (const i of Renderer.reverseholds) drawNote(i, timeChart, 3);
+    return;
+
     ctxos.globalCompositeOperation = "destination-over"; //由后往前绘制
     if (document.getElementById("showCE2").checked)
         for (const i of clickEvents2) { //绘制打击特效2
@@ -446,11 +453,11 @@ function qwqdraw1(now) {
     if (qwqIn.second >= 2.5 && !stat.lineStatus) drawLine(0); //绘制判定线(背景后0)
     ctxos.globalAlpha = 1;
     ctxos.resetTransform();
-    // if (document.getElementById("imageBlur").checked) {
-    //     ctxos.drawImage(Renderer.bgImageBlur, ...adjustSize(Renderer.bgImageBlur, canvasos, 1));
-    // } else {
-    //     ctxos.drawImage(Renderer.bgImage, ...adjustSize(Renderer.bgImage, canvasos, 1));
-    // }
+    if (document.getElementById("imageBlur").checked) {
+        ctxos.drawImage(Renderer.bgImageBlur, ...adjustSize(Renderer.bgImageBlur, canvasos, 1));
+    } else {
+        ctxos.drawImage(Renderer.bgImage, ...adjustSize(Renderer.bgImage, canvasos, 1));
+    }
     ctxos.fillRect(0, 0, canvasos.width, canvasos.height);
     ctxos.globalCompositeOperation = "source-over";
     //绘制进度条
