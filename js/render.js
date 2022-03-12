@@ -147,9 +147,9 @@ function prerenderChart(chart) {
 }
 document.addEventListener("visibilitychange", () => document.visibilityState == "hidden" && btnPause.value == "暂停" && btnPause.click());
 document.addEventListener("pagehide", () => document.visibilityState == "hidden" && btnPause.value == "暂停" && btnPause.click()); //兼容Safari
-const qwqIn = new Timer();
-const qwqOut = new Timer();
-const qwqEnd = new Timer();
+const timeSinceStart = new Timer();
+const timeSinceAnim = new Timer();
+const timeSinceEnd = new Timer();
 //play
 btnPlay.addEventListener("click", async function () {
     btnPause.value = "暂停";
@@ -180,13 +180,13 @@ btnPlay.addEventListener("click", async function () {
         isOutEnd = false;
         isPaused = false;
         timeBgm = 0;
-        if (!showTransition.checked) qwqIn.addTime(3000);
+        if (!showTransition.checked) timeSinceStart.addTime(3000);
         canvas.classList.remove("fade");
         mask.classList.add("fade");
         btnPause.classList.remove("disabled");
         for (const i of document.querySelectorAll(".disabled-when-playing")) i.classList.add("disabled");
         loop();
-        qwqIn.play();
+        timeSinceStart.play();
     } else {
         while (stopPlaying.length) stopPlaying.shift()();
         cancelAnimationFrame(stopDrawing);
@@ -201,9 +201,9 @@ btnPlay.addEventListener("click", async function () {
         clickEvents0.length = 0;
         clickEvents1.length = 0;
         clickEvents2.length = 0;
-        qwqIn.reset();
-        qwqOut.reset();
-        qwqEnd.reset();
+        timeSinceStart.reset();
+        timeSinceAnim.reset();
+        timeSinceEnd.reset();
         curTime = 0;
         curTimestamp = 0;
         duration = 0;
@@ -213,15 +213,15 @@ btnPlay.addEventListener("click", async function () {
 btnPause.addEventListener("click", function () {
     if (this.classList.contains("disabled") || btnPlay.value == "播放") return;
     if (this.value == "暂停") {
-        qwqIn.pause();
-        if (showTransition.checked && isOutStart) qwqOut.pause();
+        timeSinceStart.pause();
+        if (showTransition.checked && isOutStart) timeSinceAnim.pause();
         isPaused = true;
         this.value = "继续";
         curTime = timeBgm;
         while (stopPlaying.length) stopPlaying.shift()();
     } else {
-        qwqIn.play();
-        if (showTransition.checked && isOutStart) qwqOut.play();
+        timeSinceStart.play();
+        if (showTransition.checked && isOutStart) timeSinceAnim.play();
         isPaused = false;
         if (isInEnd && !isOutStart) playBgm(Renderer.bgMusic, timeBgm * Number(selectspeed.value));
         this.value = "暂停";
@@ -243,15 +243,16 @@ let fucktemp2 = false;
 //作图
 function loop() {
     const now = Date.now();
+    message.sendMessage(`timeSinceStart:${timeSinceStart.time} timeSinceAnim:${timeSinceAnim.time} timeSinceEnd:${timeSinceEnd.time}`)
     //计算时间
-    if (qwqOut.second < 0.67) {
-        calcqwq(now);
-        qwqdraw1(now);
-    } else if (!fucktemp) qwqdraw2();
-    if (fucktemp2) qwqdraw3(fucktemp2);
+    if (timeSinceAnim.second < 0.67) {
+        calcAngle(now);
+        draw(now);
+    } else if (!fucktemp) drawSettlementBG();
+    if (fucktemp2) drawSettlement(fucktemp2);
     ctx.globalAlpha = 1;
-    // if (document.getElementById("imageBlur").checked) ctx.drawImage(Renderer.bgImageBlur, ...adjustSize(Renderer.bgImageBlur, canvas, 1.1));
-    // else ctx.drawImage(Renderer.bgImage, ...adjustSize(Renderer.bgImage, canvas, 1.1));
+    if (document.getElementById("imageBlur").checked) ctx.drawImage(Renderer.bgImageBlur, ...adjustSize(Renderer.bgImageBlur, canvas, 1.1));
+    else ctx.drawImage(Renderer.bgImage, ...adjustSize(Renderer.bgImage, canvas, 1.1));
     ctx.fillStyle = "#000";
     ctx.globalAlpha = 0.4;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -267,8 +268,8 @@ function loop() {
     stopDrawing = requestAnimationFrame(loop); //回调更新动画
 }
 
-function calcqwq(now) {
-    if (!isInEnd && qwqIn.second >= 3) {
+function calcAngle(now) { // 计算判定线和Note的角度
+    if (!isInEnd && timeSinceStart.second >= 3) {
         isInEnd = true;
         playBgm(Renderer.bgMusic);
     }
@@ -276,7 +277,7 @@ function calcqwq(now) {
     if (timeBgm >= duration) isOutStart = true;
     if (showTransition.checked && isOutStart && !isOutEnd) {
         isOutEnd = true;
-        qwqOut.play();
+        timeSinceAnim.play();
     }
     timeChart = Math.max(timeBgm - Renderer.chart.offset / Number(selectspeed.value) - (Number(inputOffset.value) / 1e3 || 0), 0);
     //遍历判定线events和Note
@@ -367,15 +368,8 @@ function calcqwq(now) {
     for (const i in touch) touch[i] instanceof Click && touch[i].animate();
 }
 
-function qwqdraw1(now) {
+function draw(now) { // 游玩画面
     ctxos.clearRect(0, 0, canvasos.width, canvasos.height); //重置画面
-
-    for (const i of Renderer.flicks) drawNote(i, timeChart, 4);
-    for (const i of Renderer.taps) drawNote(i, timeChart, 1);
-    for (const i of Renderer.drags) drawNote(i, timeChart, 2);
-    for (const i of Renderer.reverseholds) drawNote(i, timeChart, 3);
-    return;
-
     ctxos.globalCompositeOperation = "destination-over"; //由后往前绘制
     if (document.getElementById("showCE2").checked)
         for (const i of clickEvents2) { //绘制打击特效2
@@ -413,7 +407,7 @@ function qwqdraw1(now) {
             i.time++;
         }
     }
-    if (qwqIn.second >= 3 && qwqOut.second == 0) {
+    if (timeSinceStart.second >= 3 && timeSinceAnim.second == 0) {
         if (showPoint.checked) { //绘制定位点
             ctxos.font = `${lineScale}px Mina`;
             ctxos.textAlign = "center";
@@ -445,12 +439,12 @@ function qwqdraw1(now) {
         for (const i of Renderer.reverseholds) drawNote(i, timeChart, 3);
     }
     //绘制背景
-    if (qwqIn.second >= 2.5) drawLine(stat.lineStatus ? 2 : 1); //绘制判定线(背景前1)
+    if (timeSinceStart.second >= 2.5) drawLine(stat.lineStatus ? 2 : 1); //绘制判定线(背景前1)
     ctxos.resetTransform();
     ctxos.fillStyle = "#000"; //背景变暗
     ctxos.globalAlpha = selectglobalalpha.value == "" ? 0.6 : selectglobalalpha.value; //背景不透明度
     ctxos.fillRect(0, 0, canvasos.width, canvasos.height);
-    if (qwqIn.second >= 2.5 && !stat.lineStatus) drawLine(0); //绘制判定线(背景后0)
+    if (timeSinceStart.second >= 2.5 && !stat.lineStatus) drawLine(0); //绘制判定线(背景后0)
     ctxos.globalAlpha = 1;
     ctxos.resetTransform();
     if (document.getElementById("imageBlur").checked) {
@@ -461,15 +455,15 @@ function qwqdraw1(now) {
     ctxos.fillRect(0, 0, canvasos.width, canvasos.height);
     ctxos.globalCompositeOperation = "source-over";
     //绘制进度条
-    ctxos.setTransform(canvasos.width / 1920, 0, 0, canvasos.width / 1920, 0, lineScale * (qwqIn.second < 0.67 ? (tween[2](qwqIn.second * 1.5) - 1) : -tween[2](qwqOut.second * 1.5)) * 1.75);
+    ctxos.setTransform(canvasos.width / 1920, 0, 0, canvasos.width / 1920, 0, lineScale * (timeSinceStart.second < 0.67 ? (tween[2](timeSinceStart.second * 1.5) - 1) : -tween[2](timeSinceAnim.second * 1.5)) * 1.75);
     ctxos.drawImage(res["ProgressBar"], timeBgm / duration * 1920 - 1920, 0);
     //绘制文字
     ctxos.resetTransform();
     ctxos.fillStyle = "#fff";
     //开头过渡动画
-    if (qwqIn.second < 3) {
-        if (qwqIn.second < 0.67) ctxos.globalAlpha = tween[2](qwqIn.second * 1.5);
-        else if (qwqIn.second >= 2.5) ctxos.globalAlpha = tween[2](6 - qwqIn.second * 2);
+    if (timeSinceStart.second < 3) {
+        if (timeSinceStart.second < 0.67) ctxos.globalAlpha = tween[2](timeSinceStart.second * 1.5);
+        else if (timeSinceStart.second >= 2.5) ctxos.globalAlpha = tween[2](6 - timeSinceStart.second * 2);
         ctxos.textAlign = "center";
         //歌名
         ctxos.textBaseline = "alphabetic";
@@ -483,14 +477,14 @@ function qwqdraw1(now) {
         //判定线(装饰用)
         ctxos.globalAlpha = 1;
         ctxos.setTransform(1, 0, 0, 1, wlen, hlen);
-        const imgW = lineScale * 48 * (qwqIn.second < 0.67 ? tween[3](qwqIn.second * 1.5) : 1);
+        const imgW = lineScale * 48 * (timeSinceStart.second < 0.67 ? tween[3](timeSinceStart.second * 1.5) : 1);
         const imgH = lineScale * 0.15;
-        if (qwqIn.second >= 2.5) ctxos.globalAlpha = tween[2](6 - qwqIn.second * 2);
+        if (timeSinceStart.second >= 2.5) ctxos.globalAlpha = tween[2](6 - timeSinceStart.second * 2);
         ctxos.drawImage(lineColor.checked ? res["JudgeLineMP"] : res["JudgeLine"], -imgW / 2, -imgH / 2, imgW, imgH);
     }
     //绘制分数和combo以及暂停按钮
     ctxos.globalAlpha = 1;
-    ctxos.setTransform(1, 0, 0, 1, 0, lineScale * (qwqIn.second < 0.67 ? (tween[2](qwqIn.second * 1.5) - 1) : -tween[2](qwqOut.second * 1.5)) * 1.75);
+    ctxos.setTransform(1, 0, 0, 1, 0, lineScale * (timeSinceStart.second < 0.67 ? (tween[2](timeSinceStart.second * 1.5) - 1) : -tween[2](timeSinceAnim.second * 1.5)) * 1.75);
     ctxos.textBaseline = "alphabetic";
     ctxos.font = `${lineScale * 0.95}px Mina`;
     ctxos.textAlign = "right";
@@ -500,13 +494,13 @@ function qwqdraw1(now) {
         ctxos.textAlign = "center";
         ctxos.font = `${lineScale * 1.32}px Mina`;
         ctxos.fillText(stat.combo, wlen, lineScale * 1.375);
-        ctxos.globalAlpha = qwqIn.second < 0.67 ? tween[2](qwqIn.second * 1.5) : (1 - tween[2](qwqOut.second * 1.5));
+        ctxos.globalAlpha = timeSinceStart.second < 0.67 ? tween[2](timeSinceStart.second * 1.5) : (1 - tween[2](timeSinceAnim.second * 1.5));
         ctxos.font = `${lineScale * 0.66}px Mina`;
         ctxos.fillText(autoplay.checked ? "Autoplay" : "combo", wlen, lineScale * 2.05);
     }
     //绘制歌名和等级
     ctxos.globalAlpha = 1;
-    ctxos.setTransform(1, 0, 0, 1, 0, lineScale * (qwqIn.second < 0.67 ? (1 - tween[2](qwqIn.second * 1.5)) : tween[2](qwqOut.second * 1.5)) * 1.75);
+    ctxos.setTransform(1, 0, 0, 1, 0, lineScale * (timeSinceStart.second < 0.67 ? (1 - tween[2](timeSinceStart.second * 1.5)) : tween[2](timeSinceAnim.second * 1.5)) * 1.75);
     ctxos.textBaseline = "alphabetic";
     ctxos.textAlign = "right";
     ctxos.font = `${lineScale * 0.63}px Mina`;
@@ -517,8 +511,8 @@ function qwqdraw1(now) {
     ctxos.resetTransform();
     if (qwq[0]) {
         //绘制时间和帧率以及note打击数
-        if (qwqIn.second < 0.67) ctxos.globalAlpha = tween[2](qwqIn.second * 1.5);
-        else ctxos.globalAlpha = 1 - tween[2](qwqOut.second * 1.5);
+        if (timeSinceStart.second < 0.67) ctxos.globalAlpha = tween[2](timeSinceStart.second * 1.5);
+        else ctxos.globalAlpha = 1 - tween[2](timeSinceAnim.second * 1.5);
         ctxos.textBaseline = "middle";
         ctxos.font = `${lineScale * 0.4}px Mina`;
         ctxos.textAlign = "left";
@@ -534,9 +528,9 @@ function qwqdraw1(now) {
     //判定线函数，undefined/0:默认,1:非,2:恒成立
     function drawLine(bool) {
         ctxos.globalAlpha = 1;
-        const tw = 1 - tween[2](qwqOut.second * 1.5);
+        const tw = 1 - tween[2](timeSinceAnim.second * 1.5);
         for (const i of Renderer.lines) {
-            if (bool ^ i.imageB && qwqOut.second < 0.67) {
+            if (bool ^ i.imageB && timeSinceAnim.second < 0.67) {
                 ctxos.globalAlpha = i.alpha;
                 ctxos.setTransform(...imgFlip(i.cosr * tw, i.sinr, -i.sinr * tw, i.cosr, wlen + (i.offsetX - wlen) * tw, i.offsetY)); //hiahiah
                 const imgH = i.imageH > 0 ? lineScale * 18.75 * i.imageH : canvasos.height * -i.imageH; // hlen*0.008
@@ -547,7 +541,7 @@ function qwqdraw1(now) {
     }
 }
 
-function qwqdraw2() {
+function drawSettlementBG() { //结算背景
     fucktemp = true;
     btnPause.click(); //isPaused = true;
     while (stopPlaying.length) stopPlaying.shift()();
@@ -576,15 +570,15 @@ function qwqdraw2() {
         const timeout = setTimeout(() => {
             if (!fucktemp) return;
             stopPlaying.push(playSound(bgm, true, true, 0));
-            qwqEnd.reset();
-            qwqEnd.play();
+            timeSinceEnd.reset();
+            timeSinceEnd.play();
             fucktemp2 = stat.getData(autoplay.checked);
         }, 1000);
         stopPlaying.push(() => clearTimeout(timeout));
     }
 }
 
-function qwqdraw3(statData) {
+function drawSettlement(statData) { //结算页面文字
     ctxos.resetTransform();
     ctxos.globalCompositeOperation = "source-over";
     ctxos.clearRect(0, 0, canvasos.width, canvasos.height);
@@ -598,42 +592,42 @@ function qwqdraw3(statData) {
     ctxos.globalAlpha = 1;
     const k = 3.7320508075688776; //tan75°
     ctxos.setTransform(canvasos.width - canvasos.height / k, 0, -canvasos.height / k, canvasos.height, canvasos.height / k, 0);
-    ctxos.fillRect(0, 0, 1, tween[8](range((qwqEnd.second - 0.13) * 0.94)));
+    ctxos.fillRect(0, 0, 1, tween[8](range((timeSinceEnd.second - 0.13) * 0.94)));
     ctxos.resetTransform();
     ctxos.globalCompositeOperation = "destination-over";
     const qwq0 = (canvasos.width - canvasos.height / k) / (16 - 9 / k);
     ctxos.setTransform(qwq0 / 120, 0, 0, qwq0 / 120, wlen - qwq0 * 8, hlen - qwq0 * 4.5); //?
     ctxos.drawImage(res["LevelOver4"], 183, 42, 1184, 228);
-    ctxos.globalAlpha = range((qwqEnd.second - 0.27) / 0.83);
+    ctxos.globalAlpha = range((timeSinceEnd.second - 0.27) / 0.83);
     ctxos.drawImage(res["LevelOver1"], 102, 378);
     ctxos.globalCompositeOperation = "source-over";
     ctxos.globalAlpha = 1;
-    ctxos.drawImage(res["LevelOver5"], 700 * tween[8](range(qwqEnd.second * 1.25)) - 369, 91, 20, 80);
+    ctxos.drawImage(res["LevelOver5"], 700 * tween[8](range(timeSinceEnd.second * 1.25)) - 369, 91, 20, 80);
     //歌名和等级
     ctxos.fillStyle = "#fff";
     ctxos.textBaseline = "middle";
     ctxos.textAlign = "left";
     ctxos.font = "80px Mina";
-    ctxos.fillText(inputName.value || inputName.placeholder, 700 * tween[8](range(qwqEnd.second * 1.25)) - 320, 145);
+    ctxos.fillText(inputName.value || inputName.placeholder, 700 * tween[8](range(timeSinceEnd.second * 1.25)) - 320, 145);
     ctxos.font = "30px Mina";
-    ctxos.fillText(inputLevel.value || inputLevel.placeholder, 700 * tween[8](range(qwqEnd.second * 1.25)) - 317, 208);
+    ctxos.fillText(inputLevel.value || inputLevel.placeholder, 700 * tween[8](range(timeSinceEnd.second * 1.25)) - 317, 208);
     //Rank图标
-    ctxos.globalAlpha = range((qwqEnd.second - 1.87) * 3.75);
-    const qwq2 = 293 + range((qwqEnd.second - 1.87) * 3.75) * 100;
-    const qwq3 = 410 - range((qwqEnd.second - 1.87) * 2.14) * 164;
+    ctxos.globalAlpha = range((timeSinceEnd.second - 1.87) * 3.75);
+    const qwq2 = 293 + range((timeSinceEnd.second - 1.87) * 3.75) * 100;
+    const qwq3 = 410 - range((timeSinceEnd.second - 1.87) * 2.14) * 164;
     ctxos.drawImage(res["LevelOver3"], 661 - qwq2 / 2, 545 - qwq2 / 2, qwq2, qwq2);
     ctxos.drawImage(res["Ranks"][stat.rankStatus], 661 - qwq3 / 2, 545 - qwq3 / 2, qwq3, qwq3);
     //各种数据
-    ctxos.globalAlpha = range((qwqEnd.second - 0.87) * 2.50);
+    ctxos.globalAlpha = range((timeSinceEnd.second - 0.87) * 2.50);
     ctxos.fillStyle = statData[0] ? "#18ffbf" : "#fff";
     ctxos.fillText(statData[0] ? "NEW BEST" : "BEST", 898, 428);
     ctxos.fillStyle = "#fff";
     ctxos.textAlign = "center";
     ctxos.fillText(statData[1], 1180, 428);
-    ctxos.globalAlpha = range((qwqEnd.second - 1.87) * 2.50);
+    ctxos.globalAlpha = range((timeSinceEnd.second - 1.87) * 2.50);
     ctxos.textAlign = "right";
     ctxos.fillText(statData[2], 1414, 428);
-    ctxos.globalAlpha = range((qwqEnd.second - 0.95) * 1.50);
+    ctxos.globalAlpha = range((timeSinceEnd.second - 0.95) * 1.50);
     ctxos.textAlign = "left";
     ctxos.fillText(stat.accStr, 352, 545);
     ctxos.fillText(stat.maxcombo, 1528, 545);
@@ -642,30 +636,30 @@ function qwqdraw3(statData) {
     ctxos.fillStyle = "#fff";
     ctxos.textAlign = "center";
     ctxos.font = "86px Mina";
-    ctxos.globalAlpha = range((qwqEnd.second - 1.12) * 2.00);
+    ctxos.globalAlpha = range((timeSinceEnd.second - 1.12) * 2.00);
     ctxos.fillText(stat.scoreStr, 1075, 554);
     ctxos.font = "26px Mina";
-    ctxos.globalAlpha = range((qwqEnd.second - 0.87) * 2.50);
+    ctxos.globalAlpha = range((timeSinceEnd.second - 0.87) * 2.50);
     ctxos.fillText(stat.perfect, 891, 645);
-    ctxos.globalAlpha = range((qwqEnd.second - 1.07) * 2.50);
+    ctxos.globalAlpha = range((timeSinceEnd.second - 1.07) * 2.50);
     ctxos.fillText(stat.good, 1043, 645);
-    ctxos.globalAlpha = range((qwqEnd.second - 1.27) * 2.50);
+    ctxos.globalAlpha = range((timeSinceEnd.second - 1.27) * 2.50);
     ctxos.fillText(stat.noteRank[6], 1196, 645);
-    ctxos.globalAlpha = range((qwqEnd.second - 1.47) * 2.50);
+    ctxos.globalAlpha = range((timeSinceEnd.second - 1.47) * 2.50);
     ctxos.fillText(stat.noteRank[2], 1349, 645);
     ctxos.font = "22px Mina";
-    const qwq4 = range((qwq[3] > 0 ? qwqEnd.second - qwq[3] : 0.2 - qwqEnd.second - qwq[3]) * 5.00);
-    ctxos.globalAlpha = 0.8 * range((qwqEnd.second - 0.87) * 2.50) * qwq4;
+    const qwq4 = range((qwq[3] > 0 ? timeSinceEnd.second - qwq[3] : 0.2 - timeSinceEnd.second - qwq[3]) * 5.00);
+    ctxos.globalAlpha = 0.8 * range((timeSinceEnd.second - 0.87) * 2.50) * qwq4;
     ctxos.fillStyle = "#696";
     ctxos.fill(new Path2D("M841,718s-10,0-10,10v80s0,10,10,10h100s10,0,10-10v-80s0-10-10-10h-40l-10-20-10,20h-40z"));
-    ctxos.globalAlpha = 0.8 * range((qwqEnd.second - 1.07) * 2.50) * qwq4;
+    ctxos.globalAlpha = 0.8 * range((timeSinceEnd.second - 1.07) * 2.50) * qwq4;
     ctxos.fillStyle = "#669";
     ctxos.fill(new Path2D("M993,718s-10,0-10,10v80s0,10,10,10h100s10,0,10-10v-80s0-10-10-10h-40l-10-20-10,20h-40z"));
     ctxos.fillStyle = "#fff";
-    ctxos.globalAlpha = range((qwqEnd.second - 0.97) * 2.50) * qwq4;
+    ctxos.globalAlpha = range((timeSinceEnd.second - 0.97) * 2.50) * qwq4;
     ctxos.fillText("Early: " + stat.noteRank[5], 891, 755);
     ctxos.fillText("Late: " + stat.noteRank[1], 891, 788);
-    ctxos.globalAlpha = range((qwqEnd.second - 1.17) * 2.50) * qwq4;
+    ctxos.globalAlpha = range((timeSinceEnd.second - 1.17) * 2.50) * qwq4;
     ctxos.fillText("Early: " + stat.noteRank[7], 1043, 755);
     ctxos.fillText("Late: " + stat.noteRank[3], 1043, 788);
     ctxos.resetTransform();
@@ -714,7 +708,6 @@ function drawNote(note, realTime, type) {
         else if (type == 2) ctxos.drawImage(res["DragHL"], -res["DragHL"].width * 0.5, -res["DragHL"].height * 0.5);
         else if (type == 4) ctxos.drawImage(res["FlickHL"], -res["FlickHL"].width * 0.5, -res["FlickHL"].height * 0.5);
     } else {
-        console.log("log 2");
         if (type == 1) ctxos.drawImage(res["Tap"], -res["Tap"].width * 0.5, -res["Tap"].height * 0.5);
         else if (type == 2) ctxos.drawImage(res["Drag"], -res["Drag"].width * 0.5, -res["Drag"].height * 0.5);
         else if (type == 4) ctxos.drawImage(res["Flick"], -res["Flick"].width * 0.5, -res["Flick"].height * 0.5);
