@@ -106,20 +106,6 @@ const full = {
         return !!(document.fullscreenEnabled || document.webkitFullscreenEnabled || document.mozFullScreenEnabled || document.msFullscreenEnabled);
     }
 };
-//兼容性检测
-if (typeof zip != "object") message.sendWarning("检测到zip组件未正常加载，将无法使用模拟器");
-if (typeof createImageBitmap != "function") message.sendWarning("检测到当前浏览器不支持ImageBitmap，将无法使用模拟器");
-if (!(window.AudioContext || window.webkitAudioContext)) message.sendWarning("检测到当前浏览器不支持AudioContext，将无法使用模拟器");
-if (!full.enabled) message.sendWarning("检测到当前浏览器不支持全屏，播放时双击右下角将使用伪全屏");
-//qwq
-selectbg.onchange = () => {
-    Renderer.bgImage = bgs[selectbg.value];
-    Renderer.bgImageBlur = bgsBlur[selectbg.value];
-    resizeCanvas();
-}
-//自动填写歌曲信息
-selectchart.addEventListener("change", adjustInfo);
-
 function adjustInfo() {
     for (const i of chartInfoData) {
         if (selectchart.value == i.Chart) {
