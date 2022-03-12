@@ -677,7 +677,6 @@ function range(num) {
 
 //绘制Note
 function drawNote(note, realTime, type) {
-    console.log("log 0");
     const HL = note.isMulti && document.getElementById("highLight").checked;
     if (!note.visible) return;
     console.log("log 0.1");
