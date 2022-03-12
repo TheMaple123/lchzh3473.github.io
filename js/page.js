@@ -149,10 +149,8 @@ selectscaleratio.addEventListener("change", resizeCanvas);
 selectaspectratio.addEventListener("change", resizeCanvas);
 //适应画面尺寸
 function resizeCanvas() {
-    // const width = document.documentElement.clientWidth;
-    // const height = document.documentElement.clientHeight;
-    const width = screen.width;
-    const height = screen.height;
+    const width = document.documentElement.clientWidth;
+    const height = document.documentElement.clientHeight;
     const defaultWidth = Math.min(854, width * 0.8);
     const defaultHeight = defaultWidth / (selectaspectratio.value || 16 / 9);
     const realWidth = Math.floor(full.check(canvas) ? width : defaultWidth);
