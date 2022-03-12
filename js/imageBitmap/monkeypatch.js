@@ -13,7 +13,7 @@ import { cropImage, cropBlobImage, cropImageData } from "./image-cropper.js";
 import { convertToImageBitmap, ImageBitmapPolyfill } from "./ImageBitmap-wrapper.js";
 import { isDetachedBuffer, buildSourceIs } from "./misc.js";
 
-if (!nativeCreateImageBitmap) {
+if (!nativeCreateImageBitmap || true) {
   globalThis.ImageBitmap = ImageBitmapPolyfill;
 }
 
