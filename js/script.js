@@ -16,4 +16,4 @@ function loadJS(src) {
     await loadJS("/js/input.js");
     await loadJS("/js/simulator.js");
     await loadJS("/js/render.js");
-})
+})();
