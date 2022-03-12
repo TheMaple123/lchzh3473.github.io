@@ -682,8 +682,8 @@ function drawNote(note, realTime, type) {
     if (note.type != 3 && note.scored && !note.badtime) return;
     if (note.type == 3 && note.realTime + note.realHoldTime < realTime) return; //qwq
     ctxos.globalAlpha = note.alpha;
-    message.sendMessage(note.alpha);
     ctxos.setTransform(...imgFlip(noteScale * note.cosr, noteScale * note.sinr, -noteScale * note.sinr, noteScale * note.cosr, note.offsetX, note.offsetY));
+    message.sendMessage(note.offsetX + "," + note.offsetY);
     if (type == 3) {
         const baseLength = hlen2 / noteScale * note.speed * Number(selectspeed.value);
         const holdLength = baseLength * note.realHoldTime;
