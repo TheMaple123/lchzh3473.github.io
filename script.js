@@ -963,6 +963,7 @@ upload.onchange = function () {
 		return;
 	}
 	uploads.classList.add("disabled");
+	urls.classList.add("disabled");
 	loadFile(file);
 }
 const time2Str = time => `${parseInt(time / 60)}:${`00${parseInt(time % 60)}`.slice(-2)}`;
@@ -1808,7 +1809,6 @@ function drawNote(note, realTime, type) {
 	if (!note.visible) return;
 	if (note.type != 3 && note.scored && !note.badtime) return;
 	if (note.type == 3 && note.realTime + note.realHoldTime < realTime) return; //qwq
-	message.sendMessage("drawNote " + realTime + " " + type);
 	ctxos.globalAlpha = note.alpha;
 	ctxos.setTransform(...imgFlip(noteScale * note.cosr, noteScale * note.sinr, -noteScale * note.sinr, noteScale * note.cosr, note.offsetX, note.offsetY));
 	if (type == 3) {
