@@ -243,7 +243,6 @@ let fucktemp2 = false;
 //作图
 function loop() {
     const now = Date.now();
-    message.sendMessage(`timeSinceStart:${timeSinceStart.time} timeSinceAnim:${timeSinceAnim.time} timeSinceEnd:${timeSinceEnd.time}`)
     //计算时间
     if (timeSinceAnim.second < 0.67) {
         calcAngle(now);
