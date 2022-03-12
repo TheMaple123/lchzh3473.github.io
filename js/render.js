@@ -677,12 +677,14 @@ function range(num) {
 
 //绘制Note
 function drawNote(note, realTime, type) {
+    console.log("log 0");
     const HL = note.isMulti && document.getElementById("highLight").checked;
     if (!note.visible) return;
     if (note.type != 3 && note.scored && !note.badtime) return;
     if (note.type == 3 && note.realTime + note.realHoldTime < realTime) return; //qwq
     ctxos.globalAlpha = note.alpha;
     ctxos.setTransform(...imgFlip(noteScale * note.cosr, noteScale * note.sinr, -noteScale * note.sinr, noteScale * note.cosr, note.offsetX, note.offsetY));
+    console.log("log 1");
     if (type == 3) {
         const baseLength = hlen2 / noteScale * note.speed * Number(selectspeed.value);
         const holdLength = baseLength * note.realHoldTime;
@@ -707,6 +709,7 @@ function drawNote(note, realTime, type) {
         else if (type == 2) ctxos.drawImage(res["DragHL"], -res["DragHL"].width * 0.5, -res["DragHL"].height * 0.5);
         else if (type == 4) ctxos.drawImage(res["FlickHL"], -res["FlickHL"].width * 0.5, -res["FlickHL"].height * 0.5);
     } else {
+        console.log("log 2");
         if (type == 1) ctxos.drawImage(res["Tap"], -res["Tap"].width * 0.5, -res["Tap"].height * 0.5), console.log("Tap" + realTime);
         else if (type == 2) ctxos.drawImage(res["Drag"], -res["Drag"].width * 0.5, -res["Drag"].height * 0.5);
         else if (type == 4) ctxos.drawImage(res["Flick"], -res["Flick"].width * 0.5, -res["Flick"].height * 0.5);
