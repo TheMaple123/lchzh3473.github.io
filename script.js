@@ -1806,7 +1806,7 @@ ctxos.drawImage_ = ctxos.drawImage;
 ctxos.drawImage = function (image, dx, dy) {
 	//如果没有这个console.log iPhone上就无法显示Note 十分的玄学
 	if (renderFix.checked)
-		console.log("DrawNote"), message.sendMessage("DrawImage " + image + " " + dx + " " + dy);
+		console.log("DrawImage " + image + " " + dx + " " + dy), message.sendMessage("DrawImage " + image + " " + dx + " " + dy);
 	ctxos.drawImage_(image, dx, dy);
 }
 
