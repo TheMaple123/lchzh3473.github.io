@@ -1801,15 +1801,21 @@ function range(num) {
 	if (num > 1) return 1;
 	return num;
 }
+
+ctxos.drawImage_ = ctxos.drawImage;
+ctxos.drawImage = function (image, dx, dy) {
+	//如果没有这个console.log iPhone上就无法显示Note 十分的玄学
+	if (renderFix.checked)
+		console.log("DrawNote"), message.sendMessage("DrawImage " + image + " " + dx + " " + dy);
+	ctxos.drawImage_(image, dx, dy);
+}
+
 //绘制Note
 function drawNote(note, realTime, type) {
 	const HL = note.isMulti && document.getElementById("highLight").checked;
 	if (!note.visible) return;
 	if (note.type != 3 && note.scored && !note.badtime) return;
 	if (note.type == 3 && note.realTime + note.realHoldTime < realTime) return; //qwq
-	//如果没有这个console.log iPhone上就无法显示Note 十分的玄学
-	if (renderFix.checked)
-		console.log("DrawNote"), message.sendMessage("DrawNote " + realTime);
 	ctxos.globalAlpha = note.alpha;
 	ctxos.setTransform(...imgFlip(noteScale * note.cosr, noteScale * note.sinr, -noteScale * note.sinr, noteScale * note.cosr, note.offsetX, note.offsetY));
 	if (type == 3) {
