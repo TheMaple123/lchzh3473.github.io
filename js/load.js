@@ -142,7 +142,7 @@ const loadFile = function (file) {
                     console.log(data_3);
                     chartInfoDataJSON = JSON.parse(data_3);
                     loading(++loadedNum);
-                    resolve(chartInfo);
+                    resolve(chartInfoDataJSON);
                 } else i.getData(new zip.Uint8ArrayWriter()).then(async data => {
                     const audioData = await actx.decodeAudioData(data.buffer);
                     bgms[i.filename] = audioData;
