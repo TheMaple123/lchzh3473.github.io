@@ -437,7 +437,6 @@ function qwqdraw1(now) {
         for (const i of Renderer.drags) drawNote(i, timeChart, 2);
         for (const i of Renderer.reverseholds) drawNote(i, timeChart, 3);
     }
-    return;
     //绘制背景
     if (qwqIn.second >= 2.5) drawLine(stat.lineStatus ? 2 : 1); //绘制判定线(背景前1)
     ctxos.resetTransform();
@@ -447,11 +446,11 @@ function qwqdraw1(now) {
     if (qwqIn.second >= 2.5 && !stat.lineStatus) drawLine(0); //绘制判定线(背景后0)
     ctxos.globalAlpha = 1;
     ctxos.resetTransform();
-    if (document.getElementById("imageBlur").checked) {
-        ctxos.drawImage(Renderer.bgImageBlur, ...adjustSize(Renderer.bgImageBlur, canvasos, 1));
-    } else {
-        ctxos.drawImage(Renderer.bgImage, ...adjustSize(Renderer.bgImage, canvasos, 1));
-    }
+    // if (document.getElementById("imageBlur").checked) {
+    //     ctxos.drawImage(Renderer.bgImageBlur, ...adjustSize(Renderer.bgImageBlur, canvasos, 1));
+    // } else {
+    //     ctxos.drawImage(Renderer.bgImage, ...adjustSize(Renderer.bgImage, canvasos, 1));
+    // }
     ctxos.fillRect(0, 0, canvasos.width, canvasos.height);
     ctxos.globalCompositeOperation = "source-over";
     //绘制进度条
