@@ -27,7 +27,7 @@
         return (numerator / denominator) * currentValue;
     }
 
-    if (!('createImageBitmap' in window)) {
+    if (!('createImageBitmap' in window) || true) {
         window.createImageBitmap = async function polyfillCreateImageBitmap(data, opts) {
             return new Promise((resolve, reject) => {
                 opts = opts || {};
