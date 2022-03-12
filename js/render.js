@@ -680,8 +680,11 @@ function drawNote(note, realTime, type) {
     console.log("log 0");
     const HL = note.isMulti && document.getElementById("highLight").checked;
     if (!note.visible) return;
+    console.log("log 0.1");
     if (note.type != 3 && note.scored && !note.badtime) return;
+    console.log("log 0.2");
     if (note.type == 3 && note.realTime + note.realHoldTime < realTime) return; //qwq
+    console.log("log 0.3");
     ctxos.globalAlpha = note.alpha;
     ctxos.setTransform(...imgFlip(noteScale * note.cosr, noteScale * note.sinr, -noteScale * note.sinr, noteScale * note.cosr, note.offsetX, note.offsetY));
     console.log("log 1");
