@@ -9,9 +9,11 @@ function loadJS(src) {
     });
 }
 
-loadJS("/js/config.js");
-loadJS("/js/page.js");
-loadJS("/js/load.js");
-loadJS("/js/input.js");
-loadJS("/js/simulator.js");
-loadJS("/js/render.js");
+(async () => {
+    await loadJS("/js/config.js");
+    await loadJS("/js/page.js");
+    await loadJS("/js/load.js");
+    await loadJS("/js/input.js");
+    await loadJS("/js/simulator.js");
+    await loadJS("/js/render.js");
+})
