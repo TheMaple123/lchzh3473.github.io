@@ -132,7 +132,6 @@ const lineColor = document.getElementById("lineColor");
 const autoplay = document.getElementById("autoplay");
 const hyperMode = document.getElementById("hyperMode");
 const showTransition = document.getElementById("showTransition");
-const renderFix = document.getElementById("renderFix");
 const bgs = {};
 const bgsBlur = {};
 const bgms = {};
