@@ -508,22 +508,20 @@ function draw(now) { // 游玩画面
     ctxos.textAlign = "left";
     ctxos.fillText(inputName.value || inputName.placeholder, lineScale * 0.85, canvasos.height - lineScale * 0.66);
     ctxos.resetTransform();
-    if (qwq[0]) {
-        //绘制时间和帧率以及note打击数
-        if (timeSinceStart.second < 0.67) ctxos.globalAlpha = tween[2](timeSinceStart.second * 1.5);
-        else ctxos.globalAlpha = 1 - tween[2](timeSinceAnim.second * 1.5);
-        ctxos.textBaseline = "middle";
-        ctxos.font = `${lineScale * 0.4}px Mina`;
-        ctxos.textAlign = "left";
-        ctxos.fillText(`${time2Str(timeBgm)}/${time2Str(duration)}${scfg()}`, lineScale * 0.05, lineScale * 0.5);
-        ctxos.textAlign = "right";
-        ctxos.fillText(frameTimer.fps, canvasos.width - lineScale * 0.05, lineScale * 0.5);
-        ctxos.textBaseline = "alphabetic";
-        if (showPoint.checked) stat.combos.forEach((val, idx) => {
-            ctxos.fillStyle = comboColor[idx];
-            ctxos.fillText(val, lineScale * (idx + 1) * 1.1, canvasos.height - lineScale * 0.1);
-        });
-    }
+    //绘制时间和帧率以及note打击数
+    if (timeSinceStart.second < 0.67) ctxos.globalAlpha = tween[2](timeSinceStart.second * 1.5);
+    else ctxos.globalAlpha = 1 - tween[2](timeSinceAnim.second * 1.5);
+    ctxos.textBaseline = "middle";
+    ctxos.font = `${lineScale * 0.4}px Mina`;
+    ctxos.textAlign = "left";
+    ctxos.fillText(`${time2Str(timeBgm)}/${time2Str(duration)}${scfg()}`, lineScale * 0.05, lineScale * 0.5);
+    ctxos.textAlign = "right";
+    ctxos.fillText(frameTimer.fps, canvasos.width - lineScale * 0.05, lineScale * 0.5);
+    ctxos.textBaseline = "alphabetic";
+    if (showPoint.checked) stat.combos.forEach((val, idx) => {
+        ctxos.fillStyle = comboColor[idx];
+        ctxos.fillText(val, lineScale * (idx + 1) * 1.1, canvasos.height - lineScale * 0.1);
+    });
     //判定线函数，undefined/0:默认,1:非,2:恒成立
     function drawLine(bool) {
         ctxos.globalAlpha = 1;
