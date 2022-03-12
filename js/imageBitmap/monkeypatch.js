@@ -22,25 +22,25 @@ globalThis.createImageBitmap = async function (source, ...args) { // length 1
 
   const options = parseOptions(...arguments);
 
-  // with some sources (canvas & video) we need to stay synchronous until
-  // the source's buffer gets painted
-  // but some tests are async (e.g SVGImageElement)
-  // so we only await for these tests when we are sure they are required
-  const missing_features = requiresAsyncTests(source, options) ?
-    await async_tests : tests_results;
+  // // with some sources (canvas & video) we need to stay synchronous until
+  // // the source's buffer gets painted
+  // // but some tests are async (e.g SVGImageElement)
+  // // so we only await for these tests when we are sure they are required
+  // const missing_features = requiresAsyncTests(source, options) ?
+  //   await async_tests : tests_results;
 
-  // full compat
-  if (missing_features.size === 0) {
-    return nativeCreateImageBitmap(...arguments);
-  }
+  // // full compat
+  // if (missing_features.size === 0) {
+  //   return nativeCreateImageBitmap(...arguments);
+  // }
 
-  // polyfill is not required, but some features may not be supported
-  if (
-    nativeCreateImageBitmap &&
-    !requiresPolyfill(missing_features, options, source)
-  ) {
-    return nativeCreateImageBitmap(...cleanArguments(missing_features, ...arguments));
-  }
+  // // polyfill is not required, but some features may not be supported
+  // if (
+  //   nativeCreateImageBitmap &&
+  //   !requiresPolyfill(missing_features, options, source)
+  // ) {
+  //   return nativeCreateImageBitmap(...cleanArguments(missing_features, ...arguments));
+  // }
 
   const sourceIs = buildSourceIs(source);
 
