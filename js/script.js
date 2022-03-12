@@ -12,8 +12,8 @@ function loadJS(src) {
 (async () => {
     await loadJS("/js/config.js");
     await loadJS("/js/page.js");
+    await loadJS("/js/load.js");
+    await loadJS("/js/input.js");
     await loadJS("/js/simulator.js");
-    loadJS("/js/load.js");
-    loadJS("/js/input.js");
-    loadJS("/js/render.js");
+    await loadJS("/js/render.js");
 })();
