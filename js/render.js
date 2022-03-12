@@ -437,6 +437,7 @@ function qwqdraw1(now) {
         for (const i of Renderer.drags) drawNote(i, timeChart, 2);
         for (const i of Renderer.reverseholds) drawNote(i, timeChart, 3);
     }
+    return;
     //绘制背景
     if (qwqIn.second >= 2.5) drawLine(stat.lineStatus ? 2 : 1); //绘制判定线(背景前1)
     ctxos.resetTransform();
@@ -683,7 +684,6 @@ function drawNote(note, realTime, type) {
     if (note.type == 3 && note.realTime + note.realHoldTime < realTime) return; //qwq
     ctxos.globalAlpha = note.alpha;
     ctxos.setTransform(...imgFlip(noteScale * note.cosr, noteScale * note.sinr, -noteScale * note.sinr, noteScale * note.cosr, note.offsetX, note.offsetY));
-    message.sendMessage(note.offsetX + "," + note.offsetY);
     if (type == 3) {
         const baseLength = hlen2 / noteScale * note.speed * Number(selectspeed.value);
         const holdLength = baseLength * note.realHoldTime;
