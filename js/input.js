@@ -32,7 +32,7 @@ class Click {
         if (offsetX > canvasos.width - lineScale * 1.5 && offsetY < lineScale * 1.5) specialClick.click(1);
         if (offsetX < lineScale * 1.5 && offsetY > canvasos.height - lineScale * 1.5) specialClick.click(2);
         if (offsetX > canvasos.width - lineScale * 1.5 && offsetY > canvasos.height - lineScale * 1.5) specialClick.click(3);
-        if (qwqEnd.second > 0) qwq[3] = qwq[3] > 0 ? -qwqEnd.second : qwqEnd.second;
+        if (timeSinceEnd.second > 0) qwq[3] = qwq[3] > 0 ? -timeSinceEnd.second : timeSinceEnd.second;
         return new Click(offsetX, offsetY);
     }
     move(offsetX, offsetY) {

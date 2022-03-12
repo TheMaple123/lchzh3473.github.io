@@ -9,7 +9,11 @@ function loadJS(src) {
     });
 }
 
+
+window.createImageBitmap = null;
+
 (async () => {
+    await loadJS("//cdn.jsdelivr.net/gh/Kaiido/createImageBitmap@master/dist/createImageBitmap.js");
     await loadJS("/js/config.js");
     await loadJS("/js/page.js");
     await loadJS("/js/load.js");
