@@ -370,6 +370,7 @@ function calcAngle(now) { // 计算判定线和Note的角度
 function draw(now) { // 游玩画面
     ctxos.clearRect(0, 0, canvasos.width, canvasos.height); //重置画面
     ctxos.globalCompositeOperation = "destination-over"; //由后往前绘制
+    ctxos.drawImage(res["Tap"], 0, 0);
     if (document.getElementById("showCE2").checked)
         for (const i of clickEvents2) { //绘制打击特效2
             const tick = (now - i.time) / i.duration;
