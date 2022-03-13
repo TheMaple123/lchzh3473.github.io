@@ -88,12 +88,12 @@ class Judgements extends Array {
                 const deltaTime = i.realTime - realTime;
                 if (i.scored) continue;
                 if (i.type == 1) {
-                    if (deltaTime < 0.6) this.push(new Judgement(i.offsetX, i.offsetY, 1));
+                    if (deltaTime < 0.0) this.push(new Judgement(i.offsetX, i.offsetY, 1));
                 } else if (i.type == 2) {
                     if (deltaTime < 0.2) this.push(new Judgement(i.offsetX, i.offsetY, 2));
                 } else if (i.type == 3) {
                     if (i.status3) this.push(new Judgement(i.offsetX, i.offsetY, 2));
-                    else if (deltaTime < 0.6) this.push(new Judgement(i.offsetX, i.offsetY, 1));
+                    else if (deltaTime < 0.0) this.push(new Judgement(i.offsetX, i.offsetY, 1));
                 } else if (i.type == 4) {
                     if (deltaTime < 0.2) this.push(new Judgement(i.offsetX, i.offsetY, 3));
                 }
@@ -253,7 +253,7 @@ class Judgements extends Array {
                     i.scored = true;
                 }
             } else if (i.type == 4) {
-                if (i.status == 4 && deltaTime < 0.6) {
+                if (i.status == 4 && deltaTime < 0) {
                     if (document.getElementById("hitSong").checked) playSound(res["HitSong2"], false, true, 0);
                     clickEvents1.push(ClickEvent1.getClickPerfect(i.projectX, i.projectY));
                     stat.addCombo(4, 4);
