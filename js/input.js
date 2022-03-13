@@ -179,7 +179,7 @@ class Judgements extends Array {
                     }
                 }
             } else if (i.type == 2) {
-                if (i.status == 4 && deltaTime < 0.6 && deltaTime > -0.6) {
+                if (i.status == 4 && deltaTime < 0.6) {
                     if (document.getElementById("hitSong").checked) playSound(res["HitSong1"], false, true, 0);
                     clickEvents1.push(ClickEvent1.getClickPerfect(i.projectX, i.projectY));
                     stat.addCombo(4, 2);
