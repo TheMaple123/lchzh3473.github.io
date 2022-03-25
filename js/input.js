@@ -95,7 +95,7 @@ class Judgements extends Array {
                     if (i.status3) this.push(new Judgement(i.offsetX, i.offsetY, 2));
                     else if (deltaTime < 0.0) this.push(new Judgement(i.offsetX, i.offsetY, 1));
                 } else if (i.type == 4) {
-                    if (deltaTime < 0.2) this.push(new Judgement(i.offsetX, i.offsetY, 3));
+                    if (deltaTime < 0.0) this.push(new Judgement(i.offsetX, i.offsetY, 3));
                 }
             }
         } else if (!isPaused) {
