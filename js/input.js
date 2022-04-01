@@ -90,7 +90,7 @@ class Judgements extends Array {
                 if (i.type == 1) {
                     if (deltaTime < 0.0) this.push(new Judgement(i.offsetX, i.offsetY, 1));
                 } else if (i.type == 2) {
-                    if (deltaTime < 0.2) this.push(new Judgement(i.offsetX, i.offsetY, 2));
+                    if (deltaTime < 0.0) this.push(new Judgement(i.offsetX, i.offsetY, 2));
                 } else if (i.type == 3) {
                     if (i.status3) this.push(new Judgement(i.offsetX, i.offsetY, 2));
                     else if (deltaTime < 0.0) this.push(new Judgement(i.offsetX, i.offsetY, 1));
