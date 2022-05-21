@@ -1,0 +1,42 @@
+::-webkit-scrollbar {
+	display: none;
+}
+
+body {
+	background-color: transparent;
+	font-family: Consolas, Menlo, monospace;
+	text-align: left;
+	font-size: calc(12px + 1vmin);
+}
+
+.view-table {
+	margin: 0px;
+	text-align: left;
+	line-height: 1.5em;
+}
+
+.view-table tr {
+	vertical-align: top;
+}
+
+.left {
+	word-break: keep-all;
+}
+
+.right {
+	word-break: break-all;
+}
+
+.real-table {
+	border: #000 1px solid;
+	border-spacing: 0;
+	text-align: center;
+	width: 100%;
+}
+
+.real-table th,
+.real-table td {
+	vertical-align: middle;
+	border: 1px solid gray;
+	padding: 2px 5px;
+}
